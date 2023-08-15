@@ -1,0 +1,129 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <h3 class="text-center p-3">Examinations</h3>
+  <div class="d-flex justify-content-center align-items-start">
+    <a routerLink="/examination/form"
+      ><button type="button" class="rounded-pill btn btn-outline-success">
+        Add
+      </button></a
+    >
+  </div>
+  <hr />
+
+  <div class="d-flex justify-content-center align-items-start pb-3">
+    <button type="button disabled" class="btn">Sort by</button>
+    <select
+      class="form-select w-auto"
+      (change)="onSortChange()"
+      [(ngModel)]="sortBy"
+    >
+      <option *ngFor="let size of availableFields" [ngValue]="size">
+        {{ size }}
+      </option>
+    </select>
+    <select
+      class="form-select w-auto"
+      (change)="onSortChange()"
+      [(ngModel)]="sortOrder"
+    >
+      <option *ngFor="let ord of availableOrders" [ngValue]="ord">
+        {{ ord }}
+      </option>
+    </select>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <!-- <th sortable="name" (sort)="onSort($event)" scope="col">Name</th> -->
+        <!-- <th scope="col">Identifier</th> -->
+        <th scope="col">Patient</th>
+        <th scope="col">Organization</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Status</th>
+        <th scope="col">Start</th>
+        <th scope="col">End</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="!loadingData; else loading">
+        <tr *ngFor="let exam of examinations">
+          <!-- <td>{{ exam.identifier }}</td> -->
+          <td>
+            <ng-container *ngIf="exam.patient">
+              <a
+                class="text-decoration-none"
+                [routerLink]="['/patient/details', exam.patient.id]"
+              >
+                {{ exam.patient.name }} {{ exam.patient.surname }}
+              </a>
+            </ng-container>
+          </td>
+
+          <td>
+            <ng-container *ngIf="exam.organization">
+              <a
+                class="text-decoration-none"
+                [routerLink]="['/organization/details', exam.organization.id]"
+              >
+                {{ exam.organization.name }}
+              </a>
+            </ng-container>
+          </td>
+          <td>
+            {{ exam.priority | printFormatter }}
+          </td>
+          <td>
+            {{ exam.status | printFormatter }}
+          </td>
+          <td>
+            {{ exam.startDate | date: "short" }}
+          </td>
+          <td>
+            {{ exam.endDate | date: "short" }}
+          </td>
+
+          <td>
+            <button
+              class="btn btn-outline-dark"
+              [routerLink]="['/examination/details', exam.id]"
+            >
+              <span class="btn-text-responsive">Details</span>
+            </button>
+            <ng-container *ngIf="exam.patient.active && exam.organization.active">
+              <button
+              class="btn btn-outline-primary mx-1"
+              [routerLink]="['/examination/form', exam.id]"
+            >
+              <span class="btn-text-responsive">Edit</span>
+            </button>
+            </ng-container>
+
+            <button class="btn btn-outline-danger" (click)="deleteExamination(exam.id)">Delete</button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <button type="button disabled" class="btn">Page size</button>
+    <select
+      class="form-select w-auto mx-1"
+      (change)="onPageSizeChange()"
+      [(ngModel)]="pageSize"
+    >
+      <option *ngFor="let size of availablePageSize" [ngValue]="size">
+        {{ size }}
+      </option>
+    </select>
+    <ngb-pagination
+      class="align-self-center"
+      [collectionSize]="totalItems"
+      [(page)]="currentPage"
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize"
+    ></ngb-pagination>
+  </div>
+
+  <ng-template #loading> Loading... </ng-template>
+</div>

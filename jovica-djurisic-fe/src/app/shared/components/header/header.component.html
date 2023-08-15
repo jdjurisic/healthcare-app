@@ -1,0 +1,25 @@
+<ng-container *ngIf="loginCheck()">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <ul ngbNav #nav="ngbNav" class="nav-pills">
+      <li ngbNavItem>
+        <a ngbNavLink routerLink="/home">Home</a>
+      </li>
+      <li ngbNavItem>
+        <a ngbNavLink routerLink="/organization/list">Organizations</a>
+      </li>
+      <li ngbNavItem>
+        <a ngbNavLink routerLink="/practitioner/list">Practitioners</a>
+      </li>
+      <li ngbNavItem>
+        <a ngbNavLink routerLink="/patient/list">Patitents</a>
+      </li>
+      <li ngbNavItem>
+        <a ngbNavLink routerLink="/examination/list">Examinations</a>
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-outline-danger rounded" (click)="logout()">Logout</button>
+  </div>
+</nav>
+</ng-container>

@@ -1,0 +1,115 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <h3 class="text-center p-3">Practitioners</h3>
+  <div class="d-flex justify-content-center align-items-start">
+    <a routerLink="/practitioner/form"
+      ><button type="button" class="rounded-pill btn btn-outline-success">
+        Add
+      </button></a
+    >
+  </div>
+  <hr />
+
+  <div class="d-flex justify-content-center align-items-start pb-3">
+    <button type="button disabled" class="btn">Sort by</button>
+    <select
+      class="form-select w-auto"
+      (change)="onSortChange()"
+      [(ngModel)]="sortBy"
+    >
+      <option *ngFor="let size of availableFields" [ngValue]="size">
+        {{ size }}
+      </option>
+    </select>
+    <select
+      class="form-select w-auto"
+      (change)="onSortChange()"
+      [(ngModel)]="sortOrder"
+    >
+      <option *ngFor="let ord of availableOrders" [ngValue]="ord">
+        {{ ord }}
+      </option>
+    </select>
+
+  </div>
+  <div class="d-flex justify-content-center align-items-start pb-3">
+    <button type="button disabled" class="btn">Filter</button>
+    <button type="button" class="btn" [ngClass]="unemployedFlag ? 'btn-warning' : 'btn-outline-warning'" (click)="unemployedFilter()">Unemployed</button>
+
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <!-- <th sortable="name" (sort)="onSort($event)" scope="col">Name</th> -->
+        <!-- <th scope="col">Identifier</th> -->
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Qualification</th>
+        <th scope="col">Organization</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="!loadingData; else loading">
+        <tr *ngFor="let pract of practitioners">
+          <!-- <td>{{ pract.identifier }}</td> -->
+          <td>
+            {{ pract.name }}
+          </td>
+          <td>
+            {{ pract.surname }}
+          </td>
+          <td>
+            {{ pract.qualification | printFormatter }}
+          </td>
+          <td>
+            <ng-container *ngIf="pract.organization">
+              <a
+                class="text-decoration-none"
+                [routerLink]="['/organization/details', pract.organization.id]"
+              >
+                {{ pract.organization.name }}
+              </a>
+            </ng-container>
+          </td>
+          <td>
+            <button
+              class="btn btn-outline-dark"
+              [routerLink]="['/practitioner/details', pract.id]"
+            >
+              <span class="btn-text-responsive">Details</span>
+            </button>
+            <button
+              class="btn btn-outline-primary mx-1"
+              [routerLink]="['/practitioner/form', pract.id]"
+            >
+              <span class="btn-text-responsive">Edit</span>
+            </button>
+            <button class="btn btn-outline-danger" (click)="deletePractitioner(pract.id)">Delete</button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <button type="button disabled" class="btn">Page size</button>
+    <select
+      class="form-select w-auto mx-1"
+      (change)="onPageSizeChange()"
+      [(ngModel)]="pageSize"
+    >
+      <option *ngFor="let size of availablePageSize" [ngValue]="size">
+        {{ size }}
+      </option>
+    </select>
+    <ngb-pagination
+      class="align-self-center"
+      [collectionSize]="totalItems"
+      [(page)]="currentPage"
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize"
+    ></ngb-pagination>
+  </div>
+
+  <ng-template #loading> Loading... </ng-template>
+</div>

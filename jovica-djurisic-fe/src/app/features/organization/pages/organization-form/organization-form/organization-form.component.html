@@ -1,0 +1,121 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <div *ngIf="edit; else createNew">
+    <h3 class="text-center p-3">Edit Organization</h3>
+  </div>
+  <ng-template #createNew>
+    <h3 class="text-center p-3">Add Organization</h3>
+  </ng-template>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <a routerLink="/organization/list"
+      ><button type="button" class="rounded-pill btn btn-outline-danger">Back</button>
+    </a>
+  </div>
+  <hr />
+</div>
+
+<div class="h-100 d-flex justify-content-center align-items-center">
+  <div class="d-flex flex-column">
+    <form
+      *ngIf="organizationForm"
+      [formGroup]="organizationForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="from-group">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          class="form-control"
+          placeholder="Name"
+          type="text"
+          formControlName="name"
+        />
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('name')">
+          <span *ngIf="hasErrors('name', 'required')">
+            <small>Name is required.</small>
+          </span>
+        </div>
+      </div>
+
+      <div class="from-group">
+        <label for="name">Type</label>
+        <select class="form-select" formControlName="type">
+          <option *ngFor="let type of organizationTypes" [ngValue]="type">
+            {{ type | printFormatter }}
+          </option>
+        </select>
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('type')">
+          <span *ngIf="hasErrors('type', 'required')">
+            <small>Type is required.</small>
+          </span>
+        </div>
+      </div>
+
+      <div class="from-group">
+        <label for="name">Organization identifier</label>
+        <input
+          id="identifier"
+          class="form-control"
+          placeholder="Identifier"
+          type="text"
+          formControlName="identifier"
+        />
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('identifier')">
+          <span *ngIf="hasErrors('identifier')">
+            <small>Minimum lenght is 5.</small>
+          </span>
+        </div>
+      </div>
+
+      <h5 class="pt-2">Contact</h5>
+
+      <div class="from-group">
+        <label for="name">Email</label>
+        <input
+          id="name"
+          class="form-control"
+          placeholder="Email"
+          type="email"
+          formControlName="email"
+        />
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('email')">
+          <span *ngIf="hasErrors('email')">
+            <small>Email is invalid.</small>
+          </span>
+        </div>
+      </div>
+
+      <div class="from-group">
+        <label for="adress">Adress</label>
+        <input
+          id="adress"
+          class="form-control"
+          placeholder="Address"
+          type="text"
+          formControlName="address"
+        />
+      </div>
+
+      <div class="from-group">
+        <label for="name">Phone</label>
+        <input
+          id="phone"
+          class="form-control"
+          placeholder="Phone"
+          type="text"
+          formControlName="phone"
+        />
+      </div>
+
+      <hr />
+      <div class="row justify-content-center mb-3">
+        <button class="btn btn-success" [disabled]="!organizationForm.valid">
+          Save
+        </button>
+        <span *ngIf="!organizationForm.valid" class="badge bg-danger"
+          >Form fields aren't valid.</span
+        >
+      </div>
+    </form>
+  </div>
+</div>

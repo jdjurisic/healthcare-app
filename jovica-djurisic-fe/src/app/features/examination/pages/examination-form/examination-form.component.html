@@ -1,0 +1,227 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <div *ngIf="edit; else createNew">
+    <h3 class="text-center p-3">Edit Examination</h3>
+  </div>
+  <ng-template #createNew>
+    <h3 class="text-center p-3">Add Examination</h3>
+  </ng-template>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <a routerLink="/examination/list"
+      ><button type="button" class="rounded-pill btn btn-outline-danger">Back</button>
+    </a>
+  </div>
+  <hr />
+</div>
+
+<div class="h-100 d-flex justify-content-center align-items-center">
+
+    <form
+      *ngIf="examinationForm"
+      [formGroup]="examinationForm"
+      (ngSubmit)="onSubmit()"
+    >
+
+    <div class="row g-3">
+      <div class="col">
+        <div class="from-group" *ngIf="patients">
+          <label for="patient">Patient</label>
+          <select
+            class="form-select"
+            formControlName="patient"
+            [compareWith]="compareObj"
+          >
+            <option *ngFor="let pat of patients" [ngValue]="pat">
+              {{ pat.name }} {{ pat.surname }}
+            </option>
+          </select>
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('patient')">
+            <span *ngIf="hasErrors('patient')">
+              <small>Patient is mandatory.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group" *ngIf="organizations">
+          <label for="organization">Organization</label>
+          <select
+            class="form-select"
+            formControlName="organization"
+            [compareWith]="compareObj"
+          >
+            <option *ngFor="let org of organizations" [ngValue]="org">
+              {{ org.name }}
+            </option>
+          </select>
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('organization')">
+            <span *ngIf="hasErrors('organization')">
+              <small>Organization is mandatory.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+
+      <div class="from-group" *ngIf="practitioners">
+        <label for="practitioners">Select practitioners</label>
+        <select
+          multiple
+          class="form-select"
+          formControlName="practitioners"
+          [compareWith]="compareObj"
+          size="6"
+        >
+          <option *ngFor="let doc of practitioners" [ngValue]="doc">
+            {{ doc.name }} {{ doc.surname }}
+          </option>
+        </select>
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('practitioners')">
+          <span *ngIf="hasErrors('practitioners')">
+            <small>One practitioner is required at least.</small>
+          </span>
+        </div>
+      </div>
+
+      <h5 class="pt-2">Examination data</h5>
+
+      <div class="from-group">
+        <label for="name">Identifier</label>
+        <input
+          id="identifier"
+          class="form-control"
+          placeholder="Identifier"
+          type="text"
+          formControlName="identifier"
+        />
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('identifier')">
+          <span *ngIf="hasErrors('identifier')">
+            <small>Minimum lenght is 5.</small>
+          </span>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col">
+          <div class="from-group">
+            <label for="priority">Priority</label>
+            <select class="form-select" formControlName="priority">
+              <option *ngFor="let prio of priorities" [ngValue]="prio">
+                {{ prio | printFormatter }}
+              </option>
+            </select>
+            <div class="alert alert-danger py-1" *ngIf="hasErrors('priority')">
+              <span *ngIf="hasErrors('priority', 'required')">
+                <small>Priority is required.</small>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="from-group">
+            <label for="status">Status</label>
+            <select class="form-select" formControlName="status">
+              <option *ngFor="let stat of statuses" [ngValue]="stat">
+                {{ stat | printFormatter }}
+              </option>
+            </select>
+            <div class="alert alert-danger py-1" *ngIf="hasErrors('status')">
+              <span *ngIf="hasErrors('status', 'required')">
+                <small>Status is required.</small>
+              </span>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+
+    
+      <div class="row g-3">
+        <div class="col">
+        
+      <div class="from-group">
+        <label for="startDate">Start</label>
+        <input
+          id="startDate"
+          class="form-control"
+          placeholder="Start"
+          type="datetime-local"
+          formControlName="startDate"
+        />
+
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('startDate')">
+          <span *ngIf="hasErrors('startDate', 'required')">
+            <small>Start date is required.</small>
+          </span>
+        </div>
+      </div>
+        </div>
+        <div class="col">
+          <div class="from-group">
+            <label for="endDate">End</label>
+            <input
+              id="endDate"
+              class="form-control"
+              placeholder="End"
+              type="datetime-local"
+              formControlName="endDate"
+            />
+    
+            <div class="alert alert-danger py-1" *ngIf="hasErrors('endDate')">
+              <span *ngIf="hasErrors('endDate', 'required')">
+                <small>End date is required.</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <h5 class="pt-2">Clinical data</h5>
+
+      <div class="from-group">
+        <label for="serviceType">Service type</label>
+        <select
+          class="form-select"
+          id="serviceType"
+          formControlName="serviceType"
+          [compareWith]="compareObj"
+        >
+          <option *ngFor="let srv of serviceTypes" [ngValue]="srv">
+            {{ srv.name }}
+          </option>
+        </select>
+        <div class="alert alert-danger py-1" *ngIf="hasErrors('serviceType')">
+          <span *ngIf="hasErrors('serviceType', 'required')">
+            <small>Status is required.</small>
+          </span>
+        </div>
+      </div>
+
+      <div class="from-group">
+        <label for="diagnosis">Diagnosis</label>
+        <input
+          id="diagnosis"
+          class="form-control"
+          placeholder="Diagnosis"
+          type="text"
+          formControlName="diagnosis"
+        />
+      </div>
+
+      <hr />
+      <div class="row justify-content-center mb-3">
+        <button class="btn btn-success" [disabled]="!examinationForm.valid">
+          Save
+        </button>
+        <span *ngIf="!examinationForm.valid" class="badge bg-danger"
+          >Form fields aren't valid.</span
+        >
+      </div>
+    </form>
+
+</div>

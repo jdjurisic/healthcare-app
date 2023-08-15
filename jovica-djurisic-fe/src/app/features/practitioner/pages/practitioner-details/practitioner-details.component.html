@@ -1,0 +1,92 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <h3 class="text-center p-3">Practitioner Details</h3>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <!-- <a routerLink="/practitioner/list"
+      ><button type="button" class="rounded-pill btn btn-danger">Back</button>
+    </a> -->
+    <button
+      type="button"
+      class="rounded-pill btn btn-outline-danger"
+      (click)="backClicked()"
+    >
+      Back
+    </button>
+  </div>
+  <hr />
+</div>
+
+<div class="h-100 d-flex justify-content-center align-items-center">
+  <div class="d-flex flex-column">
+    <table class="table table-striped">
+      <ng-container *ngIf="practitioner; else loading">
+        <tbody>
+          <h1 class="pt-3" [ngClass]="practitioner.active ? 'null' : 'strikethrough'">
+            {{ practitioner.name }} {{ practitioner.surname }}
+          </h1>
+
+          <!-- <tr>
+            <td>Name</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Surname</td>
+            <td></td>
+          </tr> -->
+          <tr>
+            <td>Gender</td>
+            <td>{{ practitioner.gender }}</td>
+          </tr>
+          <tr>
+            <td>Birthdate</td>
+            <td>{{ practitioner.birthDate }}</td>
+          </tr>
+
+          <h4 class="pt-5">Contact</h4>
+
+          <tr>
+            <td>Email</td>
+            <td>{{ practitioner.email }}</td>
+          </tr>
+
+          <tr>
+            <td>Phone</td>
+            <td>{{ practitioner.phone }}</td>
+          </tr>
+          <tr>
+            <td>Adress</td>
+            <td>{{ practitioner.address }}</td>
+          </tr>
+
+          <h4 class="pt-5">Work data</h4>
+
+          <tr>
+            <td>Practitioner identifier</td>
+            <td>{{ practitioner.identifier }}</td>
+          </tr>
+          <tr>
+            <td>Qualification</td>
+            <td>{{ practitioner.qualification | printFormatter }}</td>
+          </tr>
+          <tr>
+            <td>Organization</td>
+            <td>
+              <ng-container *ngIf="practitioner.organization">
+                <a
+                  class="text-decoration-none"
+                  [routerLink]="[
+                    '/organization/details',
+                    practitioner.organization.id
+                  ]"
+                >
+                  {{ practitioner.organization.name }}
+                </a>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </ng-container>
+    </table>
+  </div>
+  <ng-template #loading> Loading... </ng-template>
+</div>

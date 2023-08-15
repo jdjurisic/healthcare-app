@@ -1,0 +1,236 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <div *ngIf="edit; else createNew">
+    <h3 class="text-center p-3">Edit Patient</h3>
+  </div>
+  <ng-template #createNew>
+    <h3 class="text-center p-3">Add Patient</h3>
+  </ng-template>
+
+  <div class="d-flex justify-content-center align-items-start">
+    <a routerLink="/patient/list"
+      ><button type="button" class="rounded-pill btn btn-outline-danger">
+        Back
+      </button>
+    </a>
+  </div>
+  <hr />
+</div>
+
+<div class="h-100 d-flex justify-content-center align-items-center">
+  <form *ngIf="patientForm" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col">
+        <div class="from-group">
+          <label for="name">Name</label>
+          <input
+            id="name"
+            class="form-control"
+            placeholder="Name"
+            type="text"
+            formControlName="name"
+          />
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('name')">
+            <span *ngIf="hasErrors('name', 'required')">
+              <small>Name is required.</small>
+            </span>
+            <span *ngIf="hasErrors('name', 'minlength')">
+              <small>Name must have at least 3 characters.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group">
+          <label for="surname">Surname</label>
+          <input
+            id="surname"
+            class="form-control"
+            placeholder="Surname"
+            type="text"
+            formControlName="surname"
+          />
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('surname')">
+            <span *ngIf="hasErrors('surname', 'required')">
+              <small>Surname is required.</small>
+            </span>
+            <span *ngIf="hasErrors('surname', 'minlength')">
+              <small>Surname must have at least 3 characters.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="from-group">
+          <label for="name">Gender</label>
+          <select class="form-select" formControlName="gender">
+            <option *ngFor="let gen of genders" [ngValue]="gen">
+              {{ gen }}
+            </option>
+          </select>
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('gender')">
+            <span *ngIf="hasErrors('gender', 'required')">
+              <small>Gender is required.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group">
+          <label for="maritalStatus">Marital status</label>
+          <select class="form-select" formControlName="maritalStatus">
+            <option *ngFor="let stat of maritalStatus" [ngValue]="stat">
+              {{ stat | printFormatter }}
+            </option>
+          </select>
+          <div
+            class="alert alert-danger py-1"
+            *ngIf="hasErrors('maritalStatus')"
+          >
+            <span *ngIf="hasErrors('maritalStatus', 'required')">
+              <small>Gender is required.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="from-group">
+      <label for="name">Birthdate</label>
+      <input
+        id="birthdate"
+        class="form-control"
+        placeholder="Birthdate"
+        type="date"
+        formControlName="birthDate"
+      />
+
+      <div class="alert alert-danger py-1" *ngIf="hasErrors('birthDate')">
+        <span *ngIf="hasErrors('birthDate', 'required')">
+          <small>Birthdate is required.</small>
+        </span>
+      </div>
+    </div>
+
+    <h5 class="pt-2">Contact</h5>
+
+    <div class="row">
+      <div class="col">
+        <div class="from-group">
+          <label for="name">Email</label>
+          <input
+            id="name"
+            class="form-control"
+            placeholder="Email"
+            type="email"
+            formControlName="email"
+          />
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('email')">
+            <span *ngIf="hasErrors('email')">
+              <small>Email is invalid.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group">
+          <label for="name">Phone</label>
+          <input
+            id="phone"
+            class="form-control"
+            placeholder="Phone"
+            type="text"
+            formControlName="phone"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="from-group">
+      <label for="adress">Adress</label>
+      <input
+        id="adress"
+        class="form-control"
+        placeholder="Address"
+        type="text"
+        formControlName="address"
+      />
+    </div>
+
+    <h5 class="pt-2">Healthcare</h5>
+
+    <div class="row">
+      <div class="col">
+        <div class="from-group">
+          <label for="name">Patient identifier</label>
+          <input
+            id="identifier"
+            class="form-control"
+            placeholder="Identifier"
+            type="text"
+            formControlName="identifier"
+          />
+          <div class="alert alert-danger py-1" *ngIf="hasErrors('identifier')">
+            <span *ngIf="hasErrors('identifier')">
+              <small>Minimum lenght is 5.</small>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group">
+          <label for="deceased">Deceased</label>
+          <select class="form-select" formControlName="deceased">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="from-group" *ngIf="organizations">
+          <label for="name">Organization</label>
+          <select
+            class="form-select"
+            formControlName="organization"
+            [compareWith]="compareObj"
+          >
+            <option [ngValue]="undefined">None</option>
+            <option *ngFor="let org of organizations" [ngValue]="org">
+              {{ org.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="from-group" *ngIf="practitioners">
+          <label for="primaryCareProvider">Primary doctor </label>
+          <select
+            class="form-select"
+            formControlName="primaryCareProvider"
+            [compareWith]="compareObj"
+          >
+            <option [ngValue]="undefined">None</option>
+            <option *ngFor="let doc of practitioners" [ngValue]="doc">
+              {{ doc.name }} {{ doc.surname }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <div class="row justify-content-center mb-3">
+      <button class="btn btn-success" [disabled]="!patientForm.valid">
+        Save
+      </button>
+      <span *ngIf="!patientForm.valid" class="badge bg-danger"
+        >Form fields aren't valid.</span
+      >
+    </div>
+  </form>
+</div>
